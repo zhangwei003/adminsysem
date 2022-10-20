@@ -1,0 +1,53 @@
+sudo apt-get install zbar-tools
+sudo apt-get install qrencode
+mkdir /public/uploads/qr
+
+vi /usr/local/php/etc/php.ini
+php.ini 去掉　proc_open,proc_get_status,exec函数
+
+nohup ./shell.sh &
+
+//mysql 相关
+
+mysqldump -h loacalhost -uroot -p www_zf_com >www_zf_com.sql
+
+scp命令复制本地数据到服务器
+scp /home/www_zf_com.sql root@103.85.23.159:/home/
+scp -r /home/wwwroot/www.paofen.com/ root@103.85.23.159:/home/wwwroot/
+
+create database www_zf_com;
+
+create database www_pf_com;
+
+use www_zf_com;
+
+source /home/www_zf_com.sql;
+
+use www_pf_com;
+source /home/www_pf_com.sql;
+
+vi /usr/local/mysql/my.cnf
+去掉严格模式
+
+vi /usr/local/php/etc/php.ini
+php.ini 去掉　proc_open,proc_get_status,exec函数
+
+//上传目录
+scp -r test root@100.172.27.254:/home
+
+git:
+git config core.filemode false
+
+find ./ -type f -name '*.js'|xargs sed -i 's#72.167.224.114#api.dabenpaofen.com#g'
+
+
+location /h5/ {
+
+        root /home/wwwroot/www.vue.com/unpackage/dist/build/h5/;
+        index  index.html index.htm;
+        try_files $uri $uri/ /index.html last;
+    }
+
+
+*/1 * * * *  curl http://184.168.1.1/index/cron/tongbu
+*/1 * * * *  curl http://184.168.1.1/index/cron/pushExceptionOrder

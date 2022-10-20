@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>中通科技|中通聚合支付 - 后台管理 - 支付产品列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__ADMIN__/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="__ADMIN__/style/admin.css" media="all">
+</head>
+<body>
+<style type="text/css">
+    .layui-table-cell {
+        height: auto;
+        line-height: 15px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+
+        <!--数据表-->
+        <div class="layui-card-body">
+            <table id="app-pay-code-balance-list" lay-filter="app-pay-code-balance-list"></table>
+        </div>
+    </div>
+</div>
+
+<script src="__ADMIN__/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '__ADMIN__/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'user', 'table'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table;
+
+
+
+        setInterval(function () {
+            table.reload('app-pay-code-balance-list', {
+            });
+        },10000)
+
+
+
+        //事件
+        var active = {
+            batchdel: function () {
+                var checkStatus = table.checkStatus('app-pay-code-list')
+                    , checkData = checkStatus.data; //得到选中的数据
+                if (checkData.length === 0) {
+                    return layer.msg('请选择数据');
+                }
+                layer.prompt({
+                    formType: 1
+                    , title: '敏感操作，请验证口令'
+                }, function (value, index) {
+                    layer.close(index);
+                    layer.confirm('确定删除吗？', function (index) {
+
+                        table.reload('app-pay-code-list');
+                        layer.msg('等待开发...');
+                    });
+                });
+            }
+            , add: function () {
+                layer.open({
+                    type: 2
+                    , title: '新增支付方式'
+                    , content: 'addCode'
+                    , maxmin: true
+                    , area: ['80%', '60%']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'app-pay-code-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var l = data.field; //获取提交的字段
+                            //提交 Ajax 成功后，静态更新表格中的数据
+                            $.ajax({
+                                url: 'addCode',
+                                type: 'post',
+                                data: l,
+                                success: function (res) {
+                                    if (res.code == 1) {
+                                        //更新数据表
+                                        table.reload('app-pay-code-list'); //数据刷新
+                                        layer.close(index); //关闭弹层
+                                    }
+                                    layer.msg(res.msg, {icon: res.code == 1 ? 1 : 2, time: 1500});
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+        };
+
+        $('.layui-btn.layuiadmin-btn-useradmin').on('click', function () {
+            var events = $(this).data('events');
+            active[events] ? active[events].call(this) : '';
+        });
+    });
+</script>
+</body>
+</htm>

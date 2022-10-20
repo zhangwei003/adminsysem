@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>中通科技|中通聚合支付 - 后台管理 - 渠道统计</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__ADMIN__/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="__ADMIN__/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <!--头部-->
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+
+        </div>
+        <!--数据表-->
+        <div class="layui-card-body">
+            <table id="app-order-amount" lay-filter="app-order-amount"></table>
+        </div>
+    </div>
+</div>
+
+<script src="__ADMIN__/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '__ADMIN__/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'laydate', 'table'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , laydate = layui.laydate
+            , table = layui.table;
+
+        //同时绑定多个日期
+
+
+        //同时绑定多个日期
+        lay('.app-laydate-item').each(function (k, v) {
+            var timestamp = (k == 0) ? ' 00:00:00' : " 00:00:00";
+            var date = new Date();
+            date.setHours('00');
+            date.setMinutes('00');
+            date.setSeconds('00');
+            if (k == 1) {
+                date.setHours('23');
+                date.setMinutes('59');
+                date.setSeconds('59');
+            }
+            laydate.render({
+                elem: this,
+                format: 'yyyy-MM-dd', type: 'datetime'
+                , istime: false
+                , value: date
+                , trigger: 'click'
+            });
+        });
+
+
+        //监听搜索
+        form.on('submit(app-order-channel-search)', function (data) {
+            var field = data.field;
+
+            //执行重载
+            table.reload('app-order-channel', {
+                where: field
+            });
+        });
+
+        //初始化表格
+        table.render({
+            elem: "#app-order-amount"
+            , url: 'amountcalulateList'
+            //自定义响应字段
+            , response: {
+                statusCode: 1 //数据状态一切正常的状态码
+            },
+            cols: [[{
+                type: "checkbox",
+                fixed: "left"
+            },
+                {
+                    field: "amount",
+                    title: "金额",
+                    sort: !0
+                },
+                {
+                    field: "current_amout_count",
+                    title: "总单量"
+                },
+
+                {
+                    field: "current_amout_success_count",
+                    title: "成单量"
+                },
+
+
+                {
+                    field: "current_amout_wait_count",
+                    title: "未支付单量"
+                },
+
+
+                {
+                    field: "current_amout_success_percent",
+                    title: "成功率",
+                    templet: function (row) {
+                        return "<span style='color: red'>" + row.current_amout_success_percent + "</span>";
+                    },
+                },
+
+
+                {
+                    field: "current_amout_payd",
+                    title: "已支付总额"
+                },
+
+                {
+                    field: "current_amout_wait_pay",
+                    title: "待支付总额"
+                },
+            ]],
+            page: {
+                limit: 10,
+                limits: [10, 15, 20, 25, 30],
+            },
+            text: "对不起，加载出现异常！",
+            done: function () {
+                //加载完成
+            }
+        })
+
+    });
+</script>
+</body>
+</html>
