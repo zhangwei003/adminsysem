@@ -13,49 +13,29 @@
 <body>
 
 <div class="layui-fluid">
-    <div class="layui-card">
-        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-            <div class="layui-form-item">
+    <table class="layui-table" lay-even="" lay-skin="line">
+        <thead>
+        <tr>
+            <th> 网站</th>
+            {foreach name='days' item='day' key='k'}
+            <th>{$day}</th>
+            {/foreach}
+        </tr>
 
+        {foreach name='websites' item='website' key='k'}
+        <tr>
+            {foreach name='website.amounts' item='amount' key='k'}
+            <th>{$amount}</th>
+            {/foreach}
+        </tr>
+        {/foreach}
 
-                <div class="layui-inline">
-                    <label class="layui-form-label">时间</label>
-                    <div class="layui-input-block">
-                        <select name="minite" lay-filter="is_flat_op" class="searchItem">
-                            <option value="15">最近10分钟</option>
-                            <option value="20">最近20分钟</option>
-                            <option value="30">最近30分钟</option>
-                            <option value="60">最近60分钟</option>
-                        </select>
-                    </div>
-                </div>
+        </thead>
+        <tbody>
+        <input type="text" name="id" hidden value="{$Request.get.id}">
 
-
-            </div>
-        </div>
-
-        <div class="layui-card-body">
-
-
-            <table id="app-balance-details-list" lay-filter="app-balance-details-list"></table>
-            <script type="text/html" id="buttonType">
-                {{#  if(d.type == 'enable'){ }}
-                <span>可用余额</span>
-                {{#  } else if(d.type == 'disable'){ }}
-                <span>冻结余额</span>
-                {{#  } else { }}
-                <span>账户余额</span>
-                {{#  } }}
-            </script>
-            <script type="text/html" id="buttonTpl">
-                {{#  if(d.status == '1'){ }}
-                <button class="layui-btn layui-btn-xs">处理完成</button>
-                {{#  } else { }}
-                <button class="layui-btn layui-btn-danger layui-btn-xs">禁止操作</button>
-                {{#  } }}
-            </script>
-        </div>
-    </div>
+        </tbody>
+    </table>
 </div>
 
 <script src="__ADMIN__/layui/layui.js"></script>

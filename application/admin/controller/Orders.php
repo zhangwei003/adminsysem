@@ -896,9 +896,9 @@ GROUP BY
      */
     public function OrdersStatWebsite()
     {
-        $ordersInfo  = $this->logicOrders->getOrdersStatByWebsite();
-        //符合条件的10分钟前订单统计
-        $this->assign('ordersInfo', $ordersInfo);
+        $info  = $this->logicOrders->getOrdersStatByWebsite();
+        $this->assign('websites', $info['websites']);
+        $this->assign('days', $info['days']);
         //网站订单统计
         return $this->fetch();
     }
