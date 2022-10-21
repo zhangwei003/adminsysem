@@ -17,5 +17,9 @@ namespace app\common\model;
 
 class Website extends BaseModel
 {
+    public function getWebsitesByGroupId($groupId)
+    {
+        return $this->where('group_id', $groupId)->select();
+    }
 
 }

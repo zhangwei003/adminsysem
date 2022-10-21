@@ -1024,8 +1024,15 @@ FROM	cm_pay_channel a";
         //所有天数
         $days = getWeeks();
         $data = [];
-
-        $websites = $this->modelWebsite->getAll();
+        $admin = session('admin_info');
+        $adminId = $admin->id;
+        $group = $this->logicAuthGroupAccess->getAuthGroupAccessInfoByUid($adminId);
+        $groupId = $group['group_id'] ?? 0;
+        if ($adminId == 1) {
+            $websites = $this->modelWebsite->getAll();
+        } else {
+            $websites = $this->modelWebsite->getWebsitesByGroupId($groupId);
+        }
         $data = [];
         foreach ($websites as $k => $website) {
             $websiteName = $website['name'] ?? '';
