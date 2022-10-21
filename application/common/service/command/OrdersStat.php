@@ -30,25 +30,27 @@ class OrdersStat extends Command
     private function handle()
     {
         // 逻辑
-        $date = date('Y-m-d');
-        $yesterdayStart = date("Y-m-d 00:00:00", strtotime("-1 day"));
-        $yesterdayEnd = date("Y-m-d 23:59:59", strtotime("-1 day"));
+        $date = date("Y-m-d", strtotime("-1 day"));
+        $yesterdayStart = strtotime(date("Y-m-d 00:00:00", strtotime("-1 day")));
+        $yesterdayEnd = strtotime(date("Y-m-d 23:59:59", strtotime("-1 day")));
         try {
-            $resArr = Db::table('cm_orders')
-                ->whereTime('create_time', [$yesterdayStart, $yesterdayEnd])
-                ->select();
-            Log::notice('查询订单列表');
-
-            $websiteId = ''; //todo 网站id
-            $amount = 0; // todo 跑量
-            $data['website_id'] = $websiteId;
-            $data['date'] = $date;
-            $data['amount'] = $amount;
-
-            $res = $this->modelOrdersStat->setInfo($data);
-            if ($res) {
-                Log::notice('入库跑量成功');
+            $websiteList = Db::table('cm_website')->select();
+            $data = [];
+            foreach ($websiteList as $website) {
+                $host = $website['host'] ?? '';
+                $url = $host . 'api/orders/orderState?start=' . $yesterdayStart . '&end=' . $yesterdayEnd;
+                $res = curl_get($url);
+                $res = json_decode($res, true);
+                $amount = $res['amount'] ?? 0;
+                $data[] = [
+                    'website_id' => $website['id'] ?? 0,
+                    'date' => $date,
+                    'amount' => $amount,
+                    'create_time' => time(),
+                    'update_time' => time(),
+                ];
             }
+            db("orders_stat")->insertAll($data);
         } catch (\Exception $e) {
             Log::error("handle OrdersStat Fail:[" . $e->getMessage() . "]");
         }

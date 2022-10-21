@@ -890,10 +890,13 @@ GROUP BY
     }
 
 
+    /**
+     * 订单统计
+     * @return mixed
+     */
     public function OrdersStatWebsite()
     {
         $ordersInfo  = $this->logicOrders->getOrdersStatByWebsite();
-        dd($ordersInfo);die;
         //符合条件的10分钟前订单统计
         $this->assign('ordersInfo', $ordersInfo);
         //网站订单统计

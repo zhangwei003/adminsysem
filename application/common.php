@@ -1215,3 +1215,18 @@ function getWeeks($time = '', $format = 'Y-m-d')
     return $date;
 }
 
+
+
+function curl_get($url){
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+    curl_setopt($ch,CURLOPT_HEADER,0);
+    curl_setopt($ch,CURLOPT_NOBODY,0);
+    curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+    curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+    curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);
+    curl_setopt($ch,CURLOPT_URL,$url);
+    $output = curl_exec($ch);
+    curl_close($ch);
+    return $output;
+}

@@ -17,4 +17,17 @@ namespace app\common\model;
 
 class OrdersStat extends BaseModel
 {
+    public function getAmount($websiteId = 0, $date = null)
+    {
+        $where = [];
+
+        if ($websiteId) {
+            $where['website_id'] = $websiteId;
+        }
+        if ($date) {
+            $where['date'] = $date;
+        }
+
+        return self::where($where)->value('amount');
+    }
 }

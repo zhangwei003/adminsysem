@@ -1025,16 +1025,15 @@ FROM	cm_pay_channel a";
         $days = getWeeks();
         $data = [];
         foreach ($days as $key => $day) {
-            $params['start'] = strtotime(date('Y-m-d 00:00:00', strtotime($day)));
-            $params['end'] = strtotime(date('Y-m-d 23:59:59', strtotime($day)));
             $data[$key]['date'] = $day;
             //网站列表
             $websiteInfo = [];
             $websites = $this->modelWebsite->getAll();
             foreach ($websites as $k => $website) {
                 $websiteInfo[$k]['website'] = $website['name'] ?? '';
+                $websiteId = $website->id ?? 0;
                 $params['websiteId'] = $websiteInfo['id'] ?? 0; //todo 查询该网站对应时段的业绩
-                $amount = $this->modelOrders->getIncome($params);
+                $amount = $this->modelOrdersStat->getAmount($websiteId, $day);
                 $websiteInfo[$k]['amount'] = $amount;
             }
             $data[$key]['data'] = $websiteInfo;
