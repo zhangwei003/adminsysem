@@ -100,4 +100,23 @@ class Orders extends BaseModel
     public function changeOrderStatusValue($data = [],$where = []){
         return self::allowField(true)->save($data, $where);
     }
+
+    /**
+     * 查询订单成交额
+     * @param $params
+     * @return float|int|string
+     */
+    public function getIncome($params)
+    {
+        $start = $params['start'] ?? null;
+        $end = $params['end'] ?? null;
+
+        $where = [];
+        //时间段查询
+        if ($start && $end) {
+            $where['create_time'] = ['between', [$start, $end]];
+        }
+
+        return self::where($where)->where('status', 2)->sum('income');
+    }
 }

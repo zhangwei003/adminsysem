@@ -1203,4 +1203,15 @@ function vlidateFilter($val)
     return $val;
 }
 
+function getWeeks($time = '', $format = 'Y-m-d')
+{
+    $time = $time != '' ? $time : time();
+    //组合数据
+    $date = [];
+    for ($i = 1; $i <= 7; $i++) {
+        $day = $i - 7;
+        $date[$i] = date($format, strtotime('+' . $day . ' days', $time));
+    }
+    return $date;
+}
 
