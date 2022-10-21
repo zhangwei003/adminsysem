@@ -115,8 +115,11 @@ class Admin extends BaseAdmin
 
         $this->request->isPost() && $this->result($this->logicAdmin->userAuth($this->request->post()));
 
-        $this->assign('id', $this->request->param('id'));
-
+        $id = $this->request->param('id');
+        $groupInfo = $this->logicAuthGroupAccess->getAuthGroupAccessInfoByUid($id);
+        $groupId = $groupInfo['group_id'] ?? 0;
+        $this->assign('id', $id);
+        $this->assign('groupId', $groupId);
 
         return $this->fetch();
     }

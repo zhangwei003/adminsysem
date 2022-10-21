@@ -119,4 +119,15 @@ class AuthGroupAccess extends BaseAdmin
         
         return $this->modelAuthGroupAccess->getList($where, $field, $order, $paginate);
     }
+
+    /**
+     * 获取用户授权
+     * @param $userId
+     * @return mixed
+     */
+    public function getAuthGroupAccessInfoByUid($userId)
+    {
+        return $this->modelAuthGroupAccess->getInfo(['uid' => $userId]);
+    }
+
 }

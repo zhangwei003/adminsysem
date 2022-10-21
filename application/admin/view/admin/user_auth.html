@@ -30,7 +30,7 @@
         <label class="layui-form-label">授权角色</label>
         <div class="layui-input-block">
             {volist name="auth" id="vo"}
-            <input type="radio" name="role_ids[]" {eq name="$id" value="$vo.id"}checked{/eq} value="{$vo.id}" title="{$vo.name}" lay-skin="primary">
+            <input type="radio" name="role_ids[]" {eq name="groupId" value="$vo.id"}checked{/eq} value="{$vo.id}" title="{$vo.name}" lay-skin="primary">
             {/volist}
         </div>
     </div>
