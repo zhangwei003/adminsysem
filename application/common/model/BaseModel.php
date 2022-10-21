@@ -395,4 +395,19 @@ class BaseModel extends Model
 
         return $layer;
     }
+
+    /**
+     * 获取全部数据
+     * @param array $where
+     * @param bool $field
+     * @param string $order
+     * @return bool|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbExceptiond
+     */
+    final protected function getAll($where = [], $field = true, $order = '')
+    {
+        return $this->where($where)->order($order)->field($field)->select();
+    }
 }
