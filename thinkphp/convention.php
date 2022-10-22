@@ -244,14 +244,14 @@ return [
         // 数据库连接DSN配置
         'dsn'             => '',
         // 服务器地址
-        'hostname'        => '127.0.0.1',
+        'hostname'        => '115.28.184.68',
         // 数据库名
-        'database'        => 'www_zf_com',
+        'database'        => 'adminsystem',
 
         // 数据库用户名
-        'username'        => 'root',
+        'username'        => 'adminsystem',
         // 数据库密码
-        'password'        => '123456',
+        'password'        => 'WAANpNfmy24mdWKa',
         // 数据库连接端口
         'hostport'        => '',
         // 数据库连接参数
