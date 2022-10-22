@@ -45,4 +45,31 @@ class Website extends BaseLogic
     {
         return $this->modelWebsite->getCount($where);
     }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    public function editWebsite($data)
+    {
+
+        Db::startTrans();
+        try {
+            $this->modelWebsite->setInfo($data);
+
+            action_log('修改', '修改网站信息。ID:' . $data['id']);
+
+            Db::commit();
+            return ['code' => CodeEnum::SUCCESS, 'msg' => '编辑成功'];
+        } catch (\Exception $ex) {
+            Db::rollback();
+            Log::error($ex->getMessage());
+            return ['code' => CodeEnum::ERROR, config('app_debug') ? $ex->getMessage() : '未知错误'];
+        }
+    }
+
+    public function getWebsiteInfo($where = [], $field = true)
+    {
+        return $this->modelWebsite->getInfo($where, $field);
+    }
 }
