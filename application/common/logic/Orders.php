@@ -1023,7 +1023,6 @@ FROM	cm_pay_channel a";
     {
         //所有天数
         $days = getWeeks();
-        $data = [];
         $admin = session('admin_info');
         $adminId = $admin->id;
         $group = $this->logicAuthGroupAccess->getAuthGroupAccessInfoByUid($adminId);
@@ -1037,7 +1036,7 @@ FROM	cm_pay_channel a";
         foreach ($websites as $k => $website) {
             $websiteName = $website['name'] ?? '';
             $amounts = [$websiteName];
-            foreach ($days as $key => $day) {
+            foreach ($days as $day) {
                 $websiteId = $website->id ?? 0;
                 $amount = $this->modelOrdersStat->getAmount($websiteId, $day) ?? 0;
                 $amounts[] = $amount;
