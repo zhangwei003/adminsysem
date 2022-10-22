@@ -717,6 +717,10 @@ layui.define(["table", "form"],
                         field: "ip",
                         width: 150,
                         title: "服务器ip"
+                    },                    {
+                        field: "host",
+                        width: 150,
+                        title: "域名"
                     },
                     {
                         field: "typeTitle",
