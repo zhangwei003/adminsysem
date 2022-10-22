@@ -97,13 +97,12 @@ class Website extends BaseAdmin
     public function edit()
     {
         // post 是提交数据
-        $this->request->isPost() && $this->result($this->logicUser->editUser($this->request->post()));
+        $this->request->isPost() && $this->result($this->logicWebsite->editWebsite($this->request->post()));
         //获取商户详细信息
-        $this->assign('user', $this->logicUser->getUserInfo(['uid' => $this->request->param('id')]));
-        //所有代理商
-        $where['is_agent'] = $where['status'] = 1;
-        $agents = $this->logicUser->getUserList($where, 'uid,puid,username', 'create_time desc', false);
-        $this->assign('agents', $agents);
+        $this->assign('website', $this->logicWebsite->getWebsiteInfo(['id' => $this->request->param('id')]));
+        //所有group
+        $groups = $this->logicAuthGroup->getAuthGroupList([], true, 'create_time desc', false);
+        $this->assign('groups', $groups);
         return $this->fetch();
     }
 
