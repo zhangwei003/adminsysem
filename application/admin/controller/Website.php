@@ -17,6 +17,7 @@ namespace app\admin\controller;
 use app\admin\enum\WebsiteEnum;
 use app\common\library\enum\CodeEnum;
 use app\common\model\UserPayCodeAppoint;
+use think\Db;
 
 class Website extends BaseAdmin
 {
@@ -124,25 +125,44 @@ class Website extends BaseAdmin
     }
 
 
-
-    /*
-    *用户支付渠道pay_code
-    *
-    */
-    public function codes()
+    public function syncAmount()
     {
-        $uid = $this->request->param('id');
-        if ($this->request->isPost()) {
-            $data = $this->request->post('r/a');
-            $this->result($this->logicUser->doUserPayCodes($uid, $data));
+        $this->request->isGet() && $website = $this->logicWebsite->getWebsiteInfo(['id' => $this->request->param('id')]);
+        if (!$website) {
+            $this->error([CodeEnum::ERROR, '无此网站']);
         }
-        $data = $this->logicPay->getCodeList([], true, 'create_time desc', false);
-        foreach ($data as $k => $v) {
-            $userCode = $this->logicUser->userPayCode(['uid' => $uid, 'co_id' => $v['id']]);
-            $data[$k]['status'] = $userCode ? $userCode['status'] : -1;
+        $host = $website->host ?? '';
+        $url = $host . 'api/orders/weekAmount';
+        $res = curl_get($url);
+        $res = json_decode($res, true);
+        $res = $res['data'] ?? [];
+//        $res = [
+//            ['date' => '2022-10-17', 'amount' => 100],
+//            ['date' => '2022-10-18', 'amount' => 200],
+//            ['date' => '2022-10-19', 'amount' => 300],
+//            ['date' => '2022-10-20', 'amount' => 400],
+//            ['date' => '2022-10-21', 'amount' => 500],
+//            ['date' => '2022-10-22', 'amount' => 600],
+//            ['date' => '2022-10-23', 'amount' => 700],
+//        ];
+        if (!$res) {
+            $this->error([CodeEnum::ERROR, '网站查询错误']);
         }
-        $this->assign('list', $data);;
-        return $this->fetch();
+        $dates = array_column($res, 'date');
+        //删除七天的数据
+        Db::table('cm_orders_stat')->where('website_id', $website->id)->whereIn('date', $dates)->delete();
+        $data = [];
+        foreach ($res as $item) {
+            $data[] = [
+                'website_id' => $website->id,
+                'date' => $item['date'] ?? '',
+                'amount' => $item['amount'] ?? 0,
+                'create_time' => time(),
+                'update_time' => time(),
+            ];
+        }
+        db("orders_stat")->insertAll($data);
+        $this->result(true);
     }
 
 

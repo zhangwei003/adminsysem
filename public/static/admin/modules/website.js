@@ -787,9 +787,25 @@ layui.define(["table", "form"],
                                             });
                                         })
                             });
-                    } else if ("blind_tg_group_id" === e.event) {
-                        var mch_secret = e.data.mch_secret;
-                        layer.alert("请发送文本:【mch:" + mch_secret + "】到商户群")
+                    } else if ("syncAmount" === e.event) {
+                        layer.prompt({
+                                formType: 1,
+                                title: "敏感操作，请验证口令"
+                            },
+                            function (d, i) {
+                                layer.close(i),
+                                    layer.confirm("确定同步业绩",
+                                        function (d) {
+                                            t.ajax({
+                                                url: 'syncAmount?id=' + e.data.id,
+                                                method: 'GET',
+                                                success: function (res) {
+                                                    layer.msg(res.msg, {icon: res.code == 1 ? 1 : 2, time: 1500});
+                                                    layer.close(d); //关闭弹层
+                                                }
+                                            });
+                                        })
+                            });
                     } else if ("unblind_tg_group_id" === e.event) {
                         layer.confirm("真的要解绑此商户的TG群吗？",
                             function (d) {
