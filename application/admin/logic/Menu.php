@@ -183,7 +183,7 @@ class Menu extends BaseAdmin
 
             $info[$name] = empty($level) || empty($info['pid']) || $info['pid'] == 0? $info[$name] : $tmp_str . $info[$name];
 
-            if (!isset($info[$child])) {
+            if (!array_key_exists($child, $info)) {
                 array_push($this->menuSelect, $info);
             } else {
                // dump($info);
