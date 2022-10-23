@@ -74,7 +74,7 @@ layui.define(["table", "form"],
                         title: "添加时间"
                     }
                     , {
-                    title: "操作",
+                    title: "操作333",
                     // width: 500,
                     align: "center",
                     fixed: "right",
@@ -374,7 +374,7 @@ layui.define(["table", "form"],
                 },
 
                 {
-                    title: "操作",
+                    title: "操作444",
                     align: "center",
                     minWidth: 220,
                     // fixed: "right",
@@ -733,11 +733,11 @@ layui.define(["table", "form"],
                         title: "代理",
                     },
                     {
-                        title: "操作",
+                        title: "操作555",
                         minWidth: 400,
                         align: "center",
                         // fixed: "right",
-                        toolbar: "#table-useradmin-webuser"
+                        toolbar: "#table-websiteadmin-website"
                     }]],
                 page: !0,
                 limit: 10,
@@ -1013,11 +1013,11 @@ layui.define(["table", "form"],
                         }
                     },
                     {
-                        title: "操作",
+                        title: "操作666",
                         minWidth: 150,
                         align: "center",
                         fixed: "right",
-                        toolbar: "#table-useradmin-webuser"
+                        toolbar: "#table-websiteadmin-website"
                     }]],
                 page: !0,
                 limit: 10,
@@ -1073,7 +1073,7 @@ layui.define(["table", "form"],
                         })
                     }
                 }),
-            e("user", {}),
+            e("website", {}),
             i.render({
                 elem: "#app-user-cal",
                 url: "calList",
@@ -1316,11 +1316,11 @@ layui.define(["table", "form"],
                     },
 
                     {
-                        title: "操作",
+                        title: "操作111",
                         minWidth: 400,
                         align: "center",
                         // fixed: "right",
-                        toolbar: "#table-useradmin-webuser"
+                        toolbar: "#table-websiteadmin-website"
                     }]],
                 page: !0,
                 limit: 10,
@@ -1439,7 +1439,7 @@ layui.define(["table", "form"],
                     }
                 },
                 {
-                    title: "操作",
+                    title: "操作222",
                     align: "center",
                     minWidth: 220,
                     toolbar: "#table-ms-webuser"

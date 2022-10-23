@@ -80,13 +80,11 @@ class Website extends BaseAdmin
     public function add()
     {
         // post 是提交数据
-        $this->request->isPost() && $this->result($this->logicUser->addUser($this->request->post()));
-
-
+        $this->request->isPost() && $this->result($this->logicWebsite->addWebsite($this->request->post()));
         //所有代理商
-        $where['is_agent'] = $where['status'] = 1;
-        $agents = $this->logicUser->getUserList($where, 'uid,puid,username', 'create_time desc', false);
-        $this->assign('agents', $agents);
+        //所有group
+        $groups = $this->logicAuthGroup->getAuthGroupList([], true, 'create_time desc', false);
+        $this->assign('groups', $groups);
         return $this->fetch();
     }
 

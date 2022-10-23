@@ -52,7 +52,11 @@ class Website extends BaseLogic
      */
     public function editWebsite($data)
     {
-
+        //TODO 数据验证
+        $validate = $this->validateWebsiteValidate->scene('edit')->check($data);
+        if (!$validate) {
+            return ['code' => CodeEnum::ERROR, 'msg' => $this->validateWebsiteValidate->getError()];
+        }
         Db::startTrans();
         try {
             $this->modelWebsite->setInfo($data);
@@ -71,5 +75,29 @@ class Website extends BaseLogic
     public function getWebsiteInfo($where = [], $field = true)
     {
         return $this->modelWebsite->getInfo($where, $field);
+    }
+
+    public function addWebsite($data)
+    {
+        //TODO 数据验证
+        $validate = $this->validateWebsiteValidate->scene('add')->check($data);
+        if (!$validate) {
+            return ['code' => CodeEnum::ERROR, 'msg' => $this->validateWebsiteValidate->getError()];
+        }
+        //TODO 添加数据
+        Db::startTrans();
+        try {
+            //基本信息
+            $website = $this->modelWebsite->setInfo($data);
+            action_log('新增', '新增网站。ID:' . $website);
+
+            Db::commit();
+            return ['code' => CodeEnum::SUCCESS, 'msg' => '添加网站成功', 'data' => ['id' => $website]];
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+            Db::rollback();
+            return ['code' => CodeEnum::ERROR, config('app_debug') ? $ex->getMessage() : '未知错误'];
+        }
+
     }
 }
