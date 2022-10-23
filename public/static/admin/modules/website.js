@@ -768,23 +768,20 @@ layui.define(["table", "form"],
                                             });
                                         })
                             });
-                    } else if ("cleargoogleauth" === e.event) {
+                    } else if ("createTag" === e.event) {
                         layer.prompt({
                                 formType: 1,
                                 title: "敏感操作，请验证口令"
                             },
                             function (d, i) {
                                 layer.close(i),
-                                    layer.confirm("真的清除此商户GOOGLE身份验证吗？",
+                                    layer.confirm("确定生成tag",
                                         function (d) {
                                             t.ajax({
-                                                url: 'clearGoogleAuth?uid=' + e.data.uid,
-                                                method: 'POST',
+                                                url: e.data.host+'createTag.php',
+                                                method: 'GET',
                                                 success: function (res) {
-                                                    if (res.code == 1) {
-                                                        e.del()
-                                                    }
-                                                    layer.msg(res.msg, {icon: res.code == 1 ? 1 : 2, time: 1500});
+                                                    layer.msg("生成tag成功", {icon:  1, time: 1500});
                                                     layer.close(d); //关闭弹层
                                                 }
                                             });
