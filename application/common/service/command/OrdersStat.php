@@ -17,7 +17,7 @@ class OrdersStat extends Command
 {
     protected function configure()
     {
-        $this->setName('OrderStat')->setDescription("订单统计定时入库 at 01:00:00");
+        $this->setName('OrdersStat')->setDescription("订单统计定时入库 at 01:00:00");
     }
 
     protected function execute(Input $input, Output $output)
@@ -35,13 +35,17 @@ class OrdersStat extends Command
         $yesterdayEnd = strtotime(date("Y-m-d 23:59:59", strtotime("-1 day")));
         try {
             $websiteList = Db::table('cm_website')->select();
+            $websiteIds = array_column($websiteList, 'id');
             $data = [];
+            //删除
+            Db::table('cm_orders_stat')->whereIn('website_id', $websiteIds)->where('date', $date)->delete();
+
             foreach ($websiteList as $website) {
                 $host = $website['host'] ?? '';
                 $url = $host . 'api/orders/orderState?start=' . $yesterdayStart . '&end=' . $yesterdayEnd;
                 $res = curl_get($url);
                 $res = json_decode($res, true);
-                $amount = $res['amount'] ?? 0;
+                $amount = $res['data']['amount'] ?? 0;
                 $data[] = [
                     'website_id' => $website['id'] ?? 0,
                     'date' => $date,

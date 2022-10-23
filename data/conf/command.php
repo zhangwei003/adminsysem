@@ -15,5 +15,6 @@
 return [
     'app\\common\\service\\command\\ClearData',
     'app\\common\\service\\command\\EverydayBalance',
-    'app\common\service\command\CloseMsEwmOrder'
+    'app\common\service\command\CloseMsEwmOrder',
+    'app\common\service\command\OrdersStat'
 ];
