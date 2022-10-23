@@ -100,4 +100,22 @@ class Website extends BaseLogic
         }
 
     }
+
+    public function delWebsite($where = [])
+    {
+        Db::startTrans();
+        try {
+            $this->modelWebsite->deleteInfo($where, true);
+
+            Db::commit();
+
+            action_log('删除', '删除网站' . $where['id']);
+
+            return ['code' => CodeEnum::SUCCESS, 'msg' => '删除网站成功'];
+        } catch (\Exception $ex) {
+            Db::rollback();
+            Log::error($ex->getMessage());
+            return ['code' => CodeEnum::ERROR, config('app_debug') ? $ex->getMessage() : '未知错误'];
+        }
+    }
 }

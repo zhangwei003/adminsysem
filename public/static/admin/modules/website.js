@@ -756,7 +756,7 @@ layui.define(["table", "form"],
                                     layer.confirm("真的删除此网站吗？",
                                         function (d) {
                                             t.ajax({
-                                                url: 'del?id=' + e.data.uid,
+                                                url: 'del?id=' + e.data.id,
                                                 method: 'POST',
                                                 success: function (res) {
                                                     if (res.code == 1) {
@@ -1134,7 +1134,7 @@ layui.define(["table", "form"],
                                     layer.confirm("真的删除此商户吗,此商户所有数据将被清除？",
                                         function (d) {
                                             t.ajax({
-                                                url: 'del?uid=' + e.data.uid,
+                                                url: 'del?id=' + e.data.id,
                                                 method: 'POST',
                                                 success: function (res) {
                                                     if (res.code == 1) {
@@ -1272,7 +1272,7 @@ layui.define(["table", "form"],
                 url: "appoint_get_list",
                 //添加请求字段
                 where: {
-                    uid: t("input[ name='uid' ] ").val()
+                    id: t("input[ name='id' ] ").val()
                 },
                 //自定义响应字段
                 response: {

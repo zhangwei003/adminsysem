@@ -114,9 +114,9 @@ class Website extends BaseAdmin
     {
         // post 是提交数据
         $this->request->isPost() && $this->result(
-            $this->logicUser->delUser(
+            $this->logicWebsite->delWebsite(
                 [
-                    'uid' => $this->request->param('uid')
+                    'id' => $this->request->param('id')
                 ])
         );
         // get 直接报错
