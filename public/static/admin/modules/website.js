@@ -728,7 +728,7 @@ layui.define(["table", "form"],
                         title: "所属类型"
                     },
                     {
-                        field: "groupName",
+                        field: "adminName",
                         width: 100,
                         title: "代理",
                     },

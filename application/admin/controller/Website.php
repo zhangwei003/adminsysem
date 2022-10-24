@@ -44,16 +44,23 @@ class Website extends BaseAdmin
         //获取角色权限的网站
         $admin = session('admin_info');
         $adminId = $admin->id ?? 0;
-        if ($adminId != 1) {
-            $group = $this->logicAuthGroupAccess->getAuthGroupAccessInfoByUid($adminId);
-            $groupId = $group['group_id'] ?? 0;
-            $where['group_id'] = $groupId;
+        //查询登录用户所在组  如果是代理 根据关联代理查询 其他返回全部
+        $authGroupAccess = $this->logicAuthGroupAccess->getAuthGroupAccessInfoByUid($adminId);
+        if ($authGroupAccess && $authGroupAccess->group_id == 2) {
+            $where['uid'] = $adminId;
         }
+//        if ($adminId != 1) {
+//            $group = $this->logicAuthGroupAccess->getAuthGroupAccessInfoByUid($adminId);
+//            $groupId = $group['group_id'] ?? 0;
+//            $where['group_id'] = $groupId;
+//        }
         $data = $this->logicWebsite->getWebsiteList($where, true, 'create_time desc', false);
         foreach ($data as $website) {
             $website->typeTitle = WebsiteEnum::types($website->type) ?? '';
-            $group = $this->logicAuthGroup->getGroupInfo(['id' => $website->group_id]);
-            $website->groupName = $group->name ?? '';
+//            $group = $this->logicAuthGroup->getGroupInfo(['id' => $website->group_id]);
+//            $website->groupName = $group->name ?? '';
+            $admin = $this->logicAdmin->getAdminInfo(['id' => $website->uid]);
+            $website->adminName = $admin->nickname ?? '';
 
         }
         $count = $this->logicWebsite->getWebsiteCount($where);
@@ -84,8 +91,13 @@ class Website extends BaseAdmin
         $this->request->isPost() && $this->result($this->logicWebsite->addWebsite($this->request->post()));
         //所有代理商
         //所有group
-        $groups = $this->logicAuthGroup->getAuthGroupList([], true, 'create_time desc', false);
-        $this->assign('groups', $groups);
+//        $groups = $this->logicAuthGroup->getAuthGroupList([], true, 'create_time desc', false);
+//        $this->assign('groups', $groups);
+        //代理组写死为2
+        $groupAgentId = 2;
+        //代理角色下的所有人
+        $agentUserList = $this->logicAuthGroupAccess->getUserGroupInfoByGroupId(['group_id' => $groupAgentId], true, 'create_time desc', false);
+        $this->assign('agentUserList', $agentUserList);
         return $this->fetch();
     }
 
@@ -99,9 +111,14 @@ class Website extends BaseAdmin
         $this->request->isPost() && $this->result($this->logicWebsite->editWebsite($this->request->post()));
         //获取商户详细信息
         $this->assign('website', $this->logicWebsite->getWebsiteInfo(['id' => $this->request->param('id')]));
-        //所有group
-        $groups = $this->logicAuthGroup->getAuthGroupList([], true, 'create_time desc', false);
-        $this->assign('groups', $groups);
+//        //所有group
+//        $groups = $this->logicAuthGroup->getAuthGroupList([], true, 'create_time desc', false);
+//        $this->assign('groups', $groups);
+        //代理组写死为2
+        $groupAgentId = 2;
+        //代理角色下的所有人
+        $agentUserList = $this->logicAuthGroupAccess->getUserGroupInfoByGroupId(['group_id' => $groupAgentId], true, 'create_time desc', false);
+        $this->assign('agentUserList', $agentUserList);
         return $this->fetch();
     }
 

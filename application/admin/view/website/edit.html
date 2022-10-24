@@ -46,13 +46,13 @@
         </div>
     </div>
 
-    <div id="groups"}" class="layui-form-item">
+    <div id="agentUserList" class="layui-form-item">
         <label class="layui-form-label">所属角色：</label>
         <div class="layui-input-block">
-            <select  name="group_id" >
+            <select  name="uid" >
                 <option value="">请选择</option>
-                {foreach name='groups' item="v" key=>"key"}
-                <option {$website.group_id == $v.id?'selected':''} value="{$v.id}">{$v.name}</option>
+                {foreach name='agentUserList' item="user" key=>"key"}
+                <option {$website.uid == $user.uid?'selected':''} value="{$user.uid}">{$user.nickname}</option>
                 {/foreach}
 
             </select>
