@@ -68,7 +68,7 @@ class Index extends BaseAdmin
      */
     public function welcome()
     {
-        return $this->fetch('',$this->logicOrders->getWelcomeStat());
+        return $this->fetch();
     }
 
     /**
