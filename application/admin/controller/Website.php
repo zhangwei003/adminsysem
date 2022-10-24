@@ -124,6 +124,17 @@ class Website extends BaseAdmin
         $this->error([CodeEnum::ERROR, '未知错误']);
     }
 
+    public function createTag()
+    {
+        $this->request->isGet() && $website = $this->logicWebsite->getWebsiteInfo(['id' => $this->request->param('id')]);
+        if (!$website) {
+            $this->error([CodeEnum::ERROR, '无此网站']);
+        }
+        $host = $website->host ?? '';
+        $url = $host . 'createTag.php';
+        curl_get($url);
+        $this->result(true);
+    }
 
     public function syncAmount()
     {

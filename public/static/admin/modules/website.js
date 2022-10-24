@@ -778,7 +778,7 @@ layui.define(["table", "form"],
                                     layer.confirm("确定生成tag",
                                         function (d) {
                                             t.ajax({
-                                                url: e.data.host+'createTag.php',
+                                                url: 'createTag?id=' + e.data.id,
                                                 method: 'GET',
                                                 success: function (res) {
                                                     layer.msg("生成tag成功", {icon:  1, time: 1500});
